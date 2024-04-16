@@ -7,6 +7,11 @@ const app = express();
 const PORT = 5005 || process.env.PORT;
 
 connectDB();
+
+// Access search term
+app.use(express.urlencoded({ extended: true}));
+app.use(express.json());
+
 app.use(express.static('public')); //public folder
 
 // Templating Engine
