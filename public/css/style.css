@@ -269,10 +269,10 @@ body {
 
 /* Search Bar */
 .searchBar {
-    /* visibility: hidden;
-    transform: translateY(-100px); */
+    visibility: hidden;
+    transform: translateY(-100px);
     background-color: var(--black);
-    padding: 4px 0;
+    padding: 8px 0;
     position: absolute;
     left: 0;
     right: 0;
@@ -284,14 +284,17 @@ body {
 }
 
 .searchBar input {
-    margin: 0;
-    padding: 0;
+    margin: 0 auto;
+    padding: 0.5rem 2rem;
+    border-radius: var(--border-radius);
+    max-width: 70vw;
 }
 
 #searchClose {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 50%;
+    right: 5%;
+    transform: translateY(-50%);
     color: var(--gray-light);
     padding: 15px;
 }
