@@ -9,6 +9,25 @@ const jwt = require("jsonwebtoken");
 const adminLayout = "../views/layouts/admin";
 const jwtSecret = process.env.JWT_SECRET;
 
+// ADD MIDDLEWARE TO HELP US LOGOUT
+const authMiddleware = (req, res, next) => {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({
+        message: "unauthorized",
+      });
+    }
+    try {
+      const decoded = jwt.verify(token, jwtSecret);
+      req.userId = decoded.userId;
+      next();
+    } catch (error) {
+      res.status(401).json({
+        message: "unauthorized",
+      });
+    }
+  };
+
 router.get("/admin", async (req, res) => {
   try {
     const locals = {
@@ -40,26 +59,16 @@ router.post("/admin", async (req, res) => {
       });
     }
     const token = jwt.sign({ userId: user._id }, jwtSecret);
-    res.cookie('token', token, {httpOnly: true});
+    res.cookie("token", token, { httpOnly: true });
     res.redirect("/dashboard");
   } catch (error) {
     console.log(error);
   }
 });
 
-router.get("/dashboard", (req, res) => {
-  try {
-    const locals = {
-      title: "Admin Page",
-      discription: "Studying Nodejs Express & MongoDB",
-    };
-    res.render("admin/dashboard", { locals, adminLayout });
-  } catch (error) {
-    console.log(error);
-  }
+router.get("/dashboard", authMiddleware, async (req, res) => {
+    res.render("admin/dashboard");
 });
-
-// ADD MIDDLEWARE TO HELP US LOGOUT
 
 // REGISTER
 router.post("/register", async (req, res) => {
